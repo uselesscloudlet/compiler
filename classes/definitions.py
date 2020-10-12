@@ -1,6 +1,10 @@
 from enum import Enum
 
 
+DELIMITERS = ['(', ')', '[', ']', '{', '}',
+              '.', ',', ':', ';', '\'', '\"']
+
+
 class States(Enum):
     IDLE = 0
     ID = 1
@@ -8,7 +12,7 @@ class States(Enum):
     FLOAT = 3   
     KEYWORD = 4
     DELIM = 5
-    ASSAGMENT = 6
-    FIX = 7
+    ASSIGNMENT = 6
+    PPFIX = 7
     PLUS = 8
     MINUS = 9

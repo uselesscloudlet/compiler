@@ -2,7 +2,7 @@ from classes.stateMachine import StateMachine
 
 
 def defineLexemsFromFile(filename = ''):
-    file = open(filename, 'r')
+    file = open('tests/' + filename, 'r')
     sm = StateMachine()
     for chunk in iter(lambda: file.readline(), ''):
         for symbol in chunk:
