@@ -1,4 +1,4 @@
-from classes.definitions import States, DELIMITERS
+from classes.definitions import States, DELIMITERS, KEYWORDS, COMPRASIONSF
 
 
 class StateMachine:
@@ -32,10 +32,15 @@ class StateMachine:
             elif symbol == '.':
                 self.__buffer = symbol
                 self.currentState = States.FLOAT
-            # ? Сделать с KEYWORD
-            # elif self.isDelimiter(symbol):
-            #     self.__buffer = symbol
-            #     self.currentState = States.DELIM
+            elif self.isDelimiter(symbol):
+                self.__buffer = symbol
+                self.currentState = States.DELIM
+            elif symbol == '=':
+                self.__buffer = symbol
+                self.__currentState = States.ASSIGNMENT
+            elif symbol in COMPRASIONSF:
+                self.__buffer = symbol
+                self.__currentState = States.COMPRASIONSF
             elif symbol.isspace():
                 pass
             else:
@@ -44,7 +49,10 @@ class StateMachine:
             if symbol.isalpha() or symbol.isdigit():
                 self.__buffer += symbol
             else:
-                result = list([self.__buffer + ' ' + 'ID'])
+                if self.__buffer in KEYWORDS:
+                    result = list([self.__buffer + ' ' + 'KEYWORD'])
+                else:
+                    result = list([self.__buffer + ' ' + 'ID'])
                 self.currentState = States.IDLE
                 nextLex = self.handleSymbol(symbol)
                 if nextLex is not None:
@@ -73,3 +81,41 @@ class StateMachine:
                 if nextLex is not None:
                     result += nextLex
                 return result
+        elif self.currentState == States.DELIM:
+            result = list([self.__buffer + ' ' + 'DELIMITER'])
+            self.currentState = States.IDLE
+            nextLex = self.handleSymbol(symbol)
+            if nextLex is not None:
+                result += nextLex
+            return result
+        elif self.currentState == States.ASSIGNMENT:
+            if symbol == '=':
+                self.__buffer += symbol
+                self.currentState = States.COMPRASIONS
+            else:
+                result = list([self.__buffer + ' ' + 'ASSIGNMENT'])
+                self.currentState = States.IDLE
+                nextLex = self.handleSymbol(symbol)
+                if nextLex is not None:
+                    result += nextLex
+                return result
+        elif self.currentState == States.COMPRASIONSF:
+            if symbol == '=':
+                self.__buffer += symbol
+                self.__currentState = States.IDLE
+                return [self.__buffer + ' ' + 'COMPRASSION']
+            else:
+                result = list([self.__buffer + ' ' + 'COMPRASSION'])
+                self.currentState = States.IDLE
+                nextLex = self.handleSymbol(symbol)
+                if nextLex is not None:
+                    result += nextLex
+                return result
+        elif self.currentState == States.COMPRASIONS:
+            result = list([self.__buffer + ' ' + 'COMPRASSION'])
+            self.currentState = States.IDLE
+            nextLex = self.handleSymbol(symbol)
+            if nextLex is not None:
+                result += nextLex
+            return result
+        
