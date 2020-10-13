@@ -12,4 +12,7 @@ int main()
     b == b;
     a > c;
     b < c;
+    b++;
+    c--;
+    b += c;
 }

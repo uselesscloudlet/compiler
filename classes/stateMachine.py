@@ -1,4 +1,4 @@
-from classes.definitions import States, DELIMITERS, KEYWORDS, COMPRASIONSF
+from classes.definitions import States, DELIMITERS, KEYWORDS, COMPRASIONSF, OPERATORS
 
 
 class StateMachine:
@@ -29,9 +29,6 @@ class StateMachine:
             elif symbol.isalpha():
                 self.__buffer = symbol
                 self.currentState = States.ID
-            elif symbol == '.':
-                self.__buffer = symbol
-                self.currentState = States.FLOAT
             elif self.isDelimiter(symbol):
                 self.__buffer = symbol
                 self.currentState = States.DELIM
@@ -41,6 +38,18 @@ class StateMachine:
             elif symbol in COMPRASIONSF:
                 self.__buffer = symbol
                 self.__currentState = States.COMPRASIONSF
+            elif symbol == '.':
+                self.__buffer = symbol
+                self.currentState = States.FLOAT
+            elif symbol == '+':
+                self.__buffer = symbol
+                self.__currentState = States.PLUS
+            elif symbol in OPERATORS:
+                self.__buffer = symbol
+                
+            # elif symbol == '-':
+            #     self.__buffer = symbol
+            #     self.__currentState = States.MINUS
             elif symbol.isspace():
                 pass
             else:
@@ -103,19 +112,42 @@ class StateMachine:
             if symbol == '=':
                 self.__buffer += symbol
                 self.__currentState = States.IDLE
-                return [self.__buffer + ' ' + 'COMPRASSION']
+                return [self.__buffer + ' ' + 'COMPRASION']
             else:
-                result = list([self.__buffer + ' ' + 'COMPRASSION'])
+                result = list([self.__buffer + ' ' + 'COMPRASION'])
                 self.currentState = States.IDLE
                 nextLex = self.handleSymbol(symbol)
                 if nextLex is not None:
                     result += nextLex
                 return result
         elif self.currentState == States.COMPRASIONS:
-            result = list([self.__buffer + ' ' + 'COMPRASSION'])
+            result = list([self.__buffer + ' ' + 'COMPRASION'])
             self.currentState = States.IDLE
             nextLex = self.handleSymbol(symbol)
             if nextLex is not None:
                 result += nextLex
             return result
-        
+        elif self.__currentState == States.PLUS:
+            if symbol == '+':
+                self.__buffer += symbol
+                self.__currentState = States.IDLE
+                return [self.__buffer + ' ' + 'PRE/POST-FIX OPERATOR']
+            else:
+                result = list([self.__buffer + ' ' + 'OPERATOR'])
+                self.currentState = States.IDLE
+                nextLex = self.handleSymbol(symbol)
+                if nextLex is not None:
+                    result += nextLex
+                return result
+        elif self.__currentState == States.MINUS:
+            if symbol == '-':
+                self.__buffer += symbol
+                self.__currentState = States.IDLE
+                return [self.__buffer + ' ' + 'PRE/POST-FIX OPERATOR']
+            else:
+                result = list([self.__buffer + ' ' + 'OPERATOR'])
+                self.currentState = States.IDLE
+                nextLex = self.handleSymbol(symbol)
+                if nextLex is not None:
+                    result += nextLex
+                return result
