@@ -4,14 +4,24 @@ from classes.stateMachine import StateMachine
 def defineLexemsFromFile(filename = ''):
     file = open('tests/' + filename, 'r')
     sm = StateMachine()
+    allLex = []
     for index, chunk in enumerate(iter(lambda: file.readline(), '')):
-        print('СТРОКА ' + str(index + 1), chunk)
         for symbol in chunk:
             lexems = sm.handleSymbol(symbol)
             if lexems is None:
                 continue
-            print(lexems)
+            for lexem in lexems:
+                lexem.line = index + 1
+            allLex += lexems
+            
     lexems = sm.handleSymbol('\n')
-    if lexems is None:
-        return
-    print(lexems)
+    if lexems is not None:
+        for lexem in lexems:
+            lexem.line = index + 1
+        allLex += lexems
+
+    f = open('result.csv', 'w')
+    f.write('line,type,value,attribute\n')
+    f.write("\n".join(map(str, allLex)))
+    f.close()
+    print("\n".join(map(str, allLex)))
