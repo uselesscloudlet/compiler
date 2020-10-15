@@ -1,8 +1,5 @@
 from classes.definitions import States, DELIMITERS, KEYWORDS, COMPRASIONSF, OPERATORS
-<<<<<<< HEAD
 from classes.lexem import Lexem
-=======
->>>>>>> 4e966c7375897b22f6ad2fa278b9f6fef2062616
 
 
 class StateMachine:
@@ -45,14 +42,10 @@ class StateMachine:
             elif symbol.isalpha():
                 self.__buffer = symbol
                 self.currentState = States.ID
-<<<<<<< HEAD
             elif symbol == '.':
                 self.__buffer = symbol
                 self.currentState = States.FLOAT
             elif self.__isDelimiter(symbol):
-=======
-            elif self.isDelimiter(symbol):
->>>>>>> 4e966c7375897b22f6ad2fa278b9f6fef2062616
                 self.__buffer = symbol
                 self.currentState = States.DELIM
             elif symbol == '=':
@@ -60,7 +53,6 @@ class StateMachine:
                 self.currentState = States.ASSIGNMENT
             elif symbol in COMPRASIONSF:
                 self.__buffer = symbol
-<<<<<<< HEAD
                 self.currentState = States.COMPRASIONF
             elif symbol == '+':
                 self.__buffer = symbol
@@ -83,21 +75,6 @@ class StateMachine:
             elif symbol == '\"':
                 self.__buffer = symbol
                 self.currentState = States.STRING
-=======
-                self.__currentState = States.COMPRASIONSF
-            elif symbol == '.':
-                self.__buffer = symbol
-                self.currentState = States.FLOAT
-            elif symbol == '+':
-                self.__buffer = symbol
-                self.__currentState = States.PLUS
-            elif symbol in OPERATORS:
-                self.__buffer = symbol
-                
-            # elif symbol == '-':
-            #     self.__buffer = symbol
-            #     self.__currentState = States.MINUS
->>>>>>> 4e966c7375897b22f6ad2fa278b9f6fef2062616
             elif symbol.isspace():
                 pass
             else:
@@ -136,7 +113,6 @@ class StateMachine:
         elif self.currentState == States.COMPRASIONF:
             if symbol == '=':
                 self.__buffer += symbol
-<<<<<<< HEAD
                 self.currentState = States.IDLE
                 return [Lexem(States.COMPRASION, self.__buffer)]
             else:
@@ -203,45 +179,3 @@ class StateMachine:
                 return [Lexem(States.SCOMMENT, self.__buffer)]
             else:
                 self.__buffer += symbol
-=======
-                self.__currentState = States.IDLE
-                return [self.__buffer + ' ' + 'COMPRASION']
-            else:
-                result = list([self.__buffer + ' ' + 'COMPRASION'])
-                self.currentState = States.IDLE
-                nextLex = self.handleSymbol(symbol)
-                if nextLex is not None:
-                    result += nextLex
-                return result
-        elif self.currentState == States.COMPRASIONS:
-            result = list([self.__buffer + ' ' + 'COMPRASION'])
-            self.currentState = States.IDLE
-            nextLex = self.handleSymbol(symbol)
-            if nextLex is not None:
-                result += nextLex
-            return result
-        elif self.__currentState == States.PLUS:
-            if symbol == '+':
-                self.__buffer += symbol
-                self.__currentState = States.IDLE
-                return [self.__buffer + ' ' + 'PRE/POST-FIX OPERATOR']
-            else:
-                result = list([self.__buffer + ' ' + 'OPERATOR'])
-                self.currentState = States.IDLE
-                nextLex = self.handleSymbol(symbol)
-                if nextLex is not None:
-                    result += nextLex
-                return result
-        elif self.__currentState == States.MINUS:
-            if symbol == '-':
-                self.__buffer += symbol
-                self.__currentState = States.IDLE
-                return [self.__buffer + ' ' + 'PRE/POST-FIX OPERATOR']
-            else:
-                result = list([self.__buffer + ' ' + 'OPERATOR'])
-                self.currentState = States.IDLE
-                nextLex = self.handleSymbol(symbol)
-                if nextLex is not None:
-                    result += nextLex
-                return result
->>>>>>> 4e966c7375897b22f6ad2fa278b9f6fef2062616

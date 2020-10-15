@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 int main()
 {
     printf("Some Example");
@@ -35,16 +37,10 @@ int main()
     b == b;
     a > c;
     b < c;
-<<<<<<< HEAD
     int g = a + b;
     g++;
     g += b;
     g--;
     g -= a;
     // that is comment and we doing nothing
-=======
-    b++;
-    c--;
-    b += c;
->>>>>>> 4e966c7375897b22f6ad2fa278b9f6fef2062616
 }
