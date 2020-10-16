@@ -1,7 +1,7 @@
-#include <stdio.h>
-
 int main()
 {
+    if (a = -45 == 32) return a;
+    -22.992
     printf("Some Example");
     int a = 35482;
     float b = .9393;

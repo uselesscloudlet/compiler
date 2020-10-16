@@ -128,6 +128,12 @@ class StateMachine:
                 self.__buffer += symbol
                 self.currentState = States.IDLE
                 return [Lexem(States.ASSIGNMENT, self.__buffer)]
+            elif symbol.isdigit():
+                self.__buffer += symbol
+                self.currentState = States.INT
+            elif symbol == '.':
+                self.__buffer += symbol
+                self.currentState = States.FLOAT
             else:
                 return self.__supFunc(symbol, States.OPERATOR)
         elif self.currentState == States.MINUS:
@@ -139,6 +145,12 @@ class StateMachine:
                 self.__buffer += symbol
                 self.currentState = States.IDLE
                 return [Lexem(States.ASSIGNMENT, self.__buffer)]
+            elif symbol.isdigit():
+                self.__buffer += symbol
+                self.currentState = States.INT
+            elif symbol == '.':
+                self.__buffer += symbol
+                self.currentState = States.FLOAT
             else:
                 return self.__supFunc(symbol, States.OPERATOR)
         elif self.currentState == States.DIVIDE:

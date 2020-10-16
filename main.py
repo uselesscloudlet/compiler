@@ -1,4 +1,4 @@
 from identifier import defineLexemsFromFile
 
 
-defineLexemsFromFile('example.c')
+defineLexemsFromFile('digits.c')
