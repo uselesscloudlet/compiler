@@ -4,15 +4,13 @@ from enum import Enum
 KEYWORDS = {
     'int': 0,
     'float': 1,
-    'char': 2,
-    'long': 3,
-    'short': 4,
-    'string': 5,
-    'if': 6,
-    'else': 7,
-    'for': 8,
-    'while': 9,
-    'return': 10
+    'double': 2,
+    'char': 3,
+    'long': 4,
+    'short': 5,
+    'string': 6,
+    'if': 7,
+    'else': 8,
 }
 
 
@@ -20,7 +18,7 @@ DELIMITERS = ['(', ')', '[', ']', '{', '}',
               '.', ',', ':', ';']
 
 
-OPERATORS = ['*', '%']
+OPERATORS = ['*', '%', '~', '!']
 
 
 COMPRASIONSF = ['>', '<']
@@ -30,19 +28,20 @@ class States(Enum):
     IDLE = 0 # +
     ID = 1 # + 
     INT = 2 # +
-    FLOAT = 3 # + без E
-    STRING = 4
-    KEYWORD = 5 # + 
-    DELIM = 6 # + 
-    ASSIGNMENT = 7 # + 
-    COMPRASIONF = 8 # +
-    COMPRASION = 9 # +
-    PLUS = 10 # +
-    MINUS = 11 # + 
-    PPFIX = 12 # +
-    AND = 13 # +
-    OR = 14 # +
-    DIVIDE = 15 # +
-    OPERATOR = 16 # +
-    SCOMMENT = 17 # +
-    ERROR = 18 # +
+    FLOAT = 3 # +
+    CHAR = 4 # +
+    STRING = 5 # +
+    KEYWORD = 6 # + 
+    DELIM = 7 # + 
+    ASSIGNMENT = 8 # + 
+    COMPRASIONF = 9 # +
+    COMPRASION = 10 # +
+    PLUS = 11 # +
+    MINUS = 12 # + 
+    PPFIX = 13 # +
+    AND = 14 # +
+    OR = 15 # +
+    DIVIDE = 16 # +
+    OPERATOR = 17 # +
+    SCOMMENT = 18 # +
+    ERROR = 19 # +

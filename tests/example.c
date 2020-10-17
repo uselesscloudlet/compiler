@@ -1,15 +1,16 @@
 int main()
 {
-    if (a = -45 == 32) return a;
-    -22.992
-    printf("Some Example");
+    -22.992;
     int a = 35482;
     float b = .9393;
-    float c = 39.999;
-    float d = 0.423E10;
-    float e = 0.429E+10;
-    float f = 0.289E-12;
-
+    double c = 39.999;
+    short __someVariable;
+    long _someVar2;
+    char p = 'a';
+    char p = '2';
+    if (!a);
+    string hmm = "some string";
+    & | && ||;
     if (a > 50)
     {
         printf("True");
@@ -18,20 +19,7 @@ int main()
     {
         printf("Just False");
     }
-    for (int i = 0; i < 10; ++i)
-    {
-        printf("just example\n");
-    }
     int i = 0;
-    while (1)
-    {
-        printf("%u", i);
-        if (i == 10)
-        {
-            break;
-        }
-        i++;
-    }
     a >= c;
     b <= c;
     b == b;

@@ -3,7 +3,7 @@ from classes.lexem import Lexem
 
 
 class StateMachine:
-    __slots__ = ['__currentState', '__buffer', '__idDict']
+    __slots__ = ['__currentState', '__buffer', '__idDict', '__symbolCounter']
 
     def __init__(self):
         self.__currentState = States.IDLE
@@ -39,7 +39,7 @@ class StateMachine:
             if symbol.isdigit():
                 self.__buffer = symbol
                 self.currentState = States.INT
-            elif symbol.isalpha():
+            elif symbol.isalpha() or symbol == '_':
                 self.__buffer = symbol
                 self.currentState = States.ID
             elif symbol == '.':
@@ -72,6 +72,10 @@ class StateMachine:
             elif symbol in OPERATORS:
                 self.__buffer = symbol
                 self.currentState = States.OPERATOR
+            elif symbol == '\'':
+                self.__symbolCounter = 0
+                self.__buffer = symbol
+                self.currentState = States.CHAR
             elif symbol == '\"':
                 self.__buffer = symbol
                 self.currentState = States.STRING
@@ -80,7 +84,7 @@ class StateMachine:
             else:
                 return [Lexem(States.ERROR, self.__buffer)]
         elif self.currentState == States.ID:
-            if symbol.isalpha() or symbol.isdigit():
+            if symbol.isalpha() or symbol.isdigit() or symbol == '_':
                 self.__buffer += symbol
             else:
                 if self.__buffer in KEYWORDS:
@@ -167,14 +171,31 @@ class StateMachine:
                 self.currentState = States.IDLE
                 return [Lexem(States.OPERATOR, self.__buffer)]
             else:
-                return self.__supFunc(symbol, States.ERROR)
+                return self.__supFunc(symbol, States.OPERATOR)
         elif self.currentState == States.OR:
             if symbol == '|':
                 self.__buffer += symbol
                 self.currentState = States.IDLE
                 return [Lexem(States.OPERATOR, self.__buffer)]
             else:
-                return self.__supFunc(symbol, States.ERROR)
+                return self.__supFunc(symbol, States.OPERATOR)
+        elif self.currentState == States.CHAR:
+            if symbol == '\'':
+                if self.__symbolCounter == 1:
+                    self.__buffer += symbol
+                    self.currentState = States.IDLE
+                    return [Lexem(States.CHAR, self.__buffer)]
+                else:
+                    return [Lexem(States.ERROR, self.__buffer)]
+            elif symbol == '\n':
+                self.currentState = States.IDLE
+                return [Lexem(States.ERROR, self.__buffer)]
+            else:
+                if (self.__symbolCounter >= 1):
+                    self.currentState = States.IDLE
+                    return [Lexem(States.ERROR, self.__buffer)]
+                self.__buffer += symbol
+                self.__symbolCounter += 1
         elif self.currentState == States.STRING:
             if symbol == '\"':
                 self.__buffer += symbol
