@@ -9,7 +9,7 @@ class Lexem:
 
 
     def __repr__(self):
-        return "\"{}\",\"{}\",\"{}\",\"{}\"".format(self.__line, self.__cl, self.__value, self.__attributes)
+        return "{},{},{},{}".format(self.__line, self.__cl, self.__value, self.__attributes)
 
 
     @property
