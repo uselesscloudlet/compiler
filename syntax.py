@@ -1,204 +1,79 @@
-from syntax.settings.symbols import Terminals, NonTerminals
-from syntax.settings.parser import Parser
-from syntax.table_parser import parse_table
+from syntax.parser import Parser
+from syntax.draw import visit
+import json
 import pprint
+import pydot
+
+
+class Leaf:
+    leaf_ind = 0
+
+    def __init__(self, value, leaves, attr):
+        self.value = value
+        self.leaves = leaves
+        self.index = Leaf.leaf_ind
+        self.attr = attr
+        Leaf.leaf_ind += 1
+
+    def __str__(self):
+        return str(self.value) + "(" + str(self.index) + ")"
+
+    def __repr__(self):
+        return str(self.value) + "(" + str(self.index) + ")"
+
+    def iteritems(self):
+        items = []
+        for i, leaf in enumerate(self.leaves):
+            items.append((leaf, i))
+        return items
+
 
 lex_file = open('syntax/settings/lexems.csv', 'r')
 parser = Parser(lex_file)
 
-ct_file = open('syntax/settings/control_table.csv', 'r')
-control_table = parse_table(ct_file)
+syntax_file = open('syntax/settings/syntax.json', 'r')
+syntax = json.load(syntax_file)
+syntax_file.close()
 
-reducers = []
+control_table = syntax["control"]
+end_map = syntax["endMap"]
 
 
 def pop_n(stack, n):
-    for i in range(n):
-        stack.pop()
+    arr = []
+    for _ in range(n):
+        arr.append(stack.pop())
+    return arr
 
 
-def reduce1(stack):
-    if stack == [Terminals.NABLA, NonTerminals.STATS]:
-        pop_n(stack, 2)
-        print("Great!")
-    else:
-        raise "Too bad!"
-
-
-def reduce2(stack):
-    if stack[-2:] == [NonTerminals.STATS, NonTerminals.STAT]:
-        pop_n(stack, 2)
-        stack.append(NonTerminals.STATS)
-    elif stack[-1:] == [NonTerminals.STAT]:
-        pop_n(stack, 1)
-        stack.append(NonTerminals.STATS)
-    else:
-        raise "Too bad!"
-
-
-def reduce3(stack):
-    if stack[-1:] == [NonTerminals.OR_EXP]:
-        pop_n(stack, 1)
-        stack.append(NonTerminals.EXP)
-    else:
-        raise "Too bad!"
-
-
-def reduce4(stack):
-    if stack[-1:] == [NonTerminals.AND_EXP]:
-        pop_n(stack, 1)
-        stack.append(NonTerminals.EXP)
-    else:
-        raise "Too bad!"
-
-
-def reduce5(stack):
-    if stack[-3:] == [Terminals.VAR, Terminals.ASSIGNMENT, NonTerminals.EXP]:
-        pop_n(stack, 3)
-        stack.append(NonTerminals.ASSIGNMENT_EXP)
-    elif stack[-3:] == [NonTerminals.LOG_EXP, Terminals.AND_OPERATOR, NonTerminals.EXP]:
-        pop_n(stack, 3)
-        stack.append(NonTerminals.AND_EXP)
-    elif stack[-3:] == [NonTerminals.LOG_EXP, Terminals.OR_OPERATOR, NonTerminals.EXP]:
-        pop_n(stack, 3)
-        stack.append(NonTerminals.OR_EXP)
-    else:
-        raise "Too bad!"
-
-
-def reduce6(stack):
-    if stack[-1:] == [NonTerminals.LOG_EXP]:
-        pop_n(stack, 1)
-        stack.append(NonTerminals.AND_EXP)
-    else:
-        raise "Too bad!"
-
-
-def reduce7(stack):
-    if stack[-3:] == [NonTerminals.ADDITIVE_EXP, Terminals.COMP_OPERATOR, NonTerminals.ADDITIVE_EXP]:
-        pop_n(stack, 3)
-        stack.append(NonTerminals.LOG_EXP)
-    elif stack[-1:] == [NonTerminals.ADDITIVE_EXP]:
-        pop_n(stack, 1)
-        stack.append(NonTerminals.LOG_EXP)
-    else:
-        raise "Too bad!"
-
-
-def reduce8(stack):
-    if stack[-3:] == [NonTerminals.ADDITIVE_EXP, Terminals.PM_OPERATOR, NonTerminals.MULT_EXP]:
-        pop_n(stack, 3)
-        stack.append(NonTerminals.ADDITIVE_EXP)
-    elif stack[-1:] == [NonTerminals.MULT_EXP]:
-        pop_n(stack, 1)
-        stack.append(NonTerminals.ADDITIVE_EXP)
-    else:
-        raise "Too bad!"
-
-
-def reduce9(stack):
-    if stack[-4:] == [Terminals.OPEN_PAR, Terminals.TYPE_NAME, Terminals.CLOSE_PAR, NonTerminals.CAST_EXP]:
-        pop_n(stack, 4)
-        stack.append(NonTerminals.CAST_EXP)
-    elif stack[-3:] == [NonTerminals.MULT_EXP, Terminals.MD_OPERATOR, NonTerminals.CAST_EXP]:
-        pop_n(stack, 3)
-        stack.append(NonTerminals.MULT_EXP)
-    elif stack[-2:] == [Terminals.UNARY_OPERATOR, NonTerminals.CAST_EXP]:
-        pop_n(stack, 2)
-        stack.append(NonTerminals.UNARY_EXP)
-    elif stack[-1:] == [NonTerminals.CAST_EXP]:
-        pop_n(stack, 1)
-        stack.append(NonTerminals.MULT_EXP)
-    else:
-        raise "Too bad!"
-
-
-def reduce10(stack):
-    if stack[-2:] == [Terminals.PPFIX_OPERATOR, NonTerminals.UNARY_EXP]:
-        pop_n(stack, 2)
-        stack.append(NonTerminals.UNARY_EXP)
-    elif stack[-1:] == [NonTerminals.UNARY_EXP]:
-        pop_n(stack, 1)
-        stack.append(NonTerminals.CAST_EXP)
-    else:
-        raise "Too bad!"
-
-
-def reduce11(stack):
-    if stack[-2:] == [NonTerminals.ASSIGNMENT_EXP, Terminals.SEMICOLON]:
-        pop_n(stack, 2)
-        stack.append(NonTerminals.STAT)
-    else:
-        raise "Too bad!"
-
-
-def reduce12(stack):
-    if stack[-3:] == [Terminals.OPEN_CURBR, NonTerminals.STATS, Terminals.CLOSE_CURBR]:
-        pop_n(stack, 3)
-        stack.append(NonTerminals.STAT)
-    else:
-        raise "Too bad!"
-
-
-def reduce13(stack):
-    if stack[-1:] == [Terminals.VAR]:
-        pop_n(stack, 1)
-        stack.append(NonTerminals.UNARY_EXP)
-    else:
-        raise "Too bad!"
-
-
-def reduce14(stack):
-    if stack[-1:] == [Terminals.CONST]:
-        pop_n(stack, 1)
-        stack.append(NonTerminals.UNARY_EXP)
-    else:
-        raise "Too bad!"
-
-
-buff = [Terminals.NABLA]
+buff = [Leaf("nabla", [], None)]
 
 lexem = parser.next_lexem()
+last_known_line = 0
+while buff[-1].value != "PROGRAM":
+    if lexem.line is not None:
+        last_known_line = lexem.line
+    last = buff[-1].value
 
-while len(buff) > 0:
-    if (lexem.term not in control_table) or (buff[-1] not in control_table[lexem.term]):
-        raise "Too bad!"
-    action = control_table[lexem.term][buff[-1]]
-
+    if (lexem.term not in control_table) or (last not in control_table[lexem.term]):
+        raise Exception("Error in line: " + str(last_known_line))
+    action = control_table[lexem.term][last]
     if action == 'shift':
-        buff.append(lexem.term)
+        buff.append(Leaf(lexem.term, [], lexem.value))
         lexem = parser.next_lexem()
     elif action == 'reduce':
-        if buff[-1] == NonTerminals.STATS:
-            reduce1(buff)
-        elif buff[-1] == NonTerminals.STAT:
-            reduce2(buff)
-        elif buff[-1] == NonTerminals.OR_EXP:
-            reduce3(buff)
-        elif buff[-1] == NonTerminals.AND_EXP:
-            reduce4(buff)
-        elif buff[-1] == NonTerminals.EXP:
-            reduce5(buff)
-        elif buff[-1] == NonTerminals.LOG_EXP:
-            reduce6(buff)
-        elif buff[-1] == NonTerminals.ADDITIVE_EXP:
-            reduce7(buff)
-        elif buff[-1] == NonTerminals.MULT_EXP:
-            reduce8(buff)
-        elif buff[-1] == NonTerminals.CAST_EXP:
-            reduce9(buff)
-        elif buff[-1] == NonTerminals.UNARY_EXP:
-            reduce10(buff)
-        elif buff[-1] == Terminals.SEMICOLON:
-            reduce11(buff)
-        elif buff[-1] == Terminals.CLOSE_CURBR:
-            reduce12(buff)
-        elif buff[-1] == Terminals.VAR:
-            reduce13(buff)
-        elif buff[-1] == Terminals.CONST:
-            reduce14(buff)
-        else:
-            print("WTF")
-
+        rules = end_map[last]
+        for rule in rules:
+            right = rule["right"]
+            left = rule["left"]
+            if list(map(lambda l: l.value, buff[-len(right):])) == right:
+                buff.append(Leaf(left, pop_n(buff, len(right)), lexem.value))
     else:
-        print("Too bad!")
+        raise Exception("Error in line: " + str(last_known_line))
+
+graph = pydot.Dot(graph_type='graph')
+visit(buff[-1], graph=graph)
+graph.write_png('tree.png')
+
+
+lex_file.close()

@@ -1,52 +1,53 @@
-from syntax.settings.symbols import Terminals
 
 
 def map_lexem_to_term(lexem):
     if (lexem.cl == ''):
-        return Terminals.END_SYMBOL
+        return "eof"
     elif (lexem.cl == 'States.OPERATOR' and
           lexem.value == '||'):
-        return Terminals.OR_OPERATOR
+        return "||"
     elif (lexem.cl == 'States.OPERATOR' and
             lexem.value == '&&'):
-        return Terminals.AND_OPERATOR
+        return "&&"
     elif (lexem.cl == 'States.COMPRASION'):
-        return Terminals.COMP_OPERATOR
+        return "comp_operator"
     elif (lexem.cl == 'States.OPERATOR' and
           lexem.value in ['+', '-']):
-        return Terminals.PM_OPERATOR
+        return "pm_operator"
     elif (lexem.cl == 'States.OPERATOR' and
           lexem.value in ['*', '/', '%']):
-        return Terminals.MD_OPERATOR
+        return "md_operator"
     elif (lexem.cl == 'States.PPFIX'):
-        return Terminals.PPFIX_OPERATOR
+        return "prefix_operator"
     elif (lexem.cl == 'States.OPERATOR' and
           lexem.value in ['~', '!']):
-        return Terminals.UNARY_OPERATOR
+        return "unary_operator"
     elif (lexem.cl == 'States.ID'):
-        return Terminals.VAR
+        return "var"
     elif (lexem.cl == 'States.KEYWORD' and
           lexem.value in ['int', 'float', 'char', 'string', 'double', 'short']):
-        return Terminals.TYPE_NAME
+        return "type_name"
     elif (lexem.cl == 'States.DELIM' and
           lexem.value == '('):
-        return Terminals.OPEN_PAR
+        return "("
     elif (lexem.cl == 'States.DELIM' and
           lexem.value == ')'):
-        return Terminals.CLOSE_PAR
+        return ")"
     elif (lexem.cl == 'States.DELIM' and
           lexem.value == '{'):
-        return Terminals.OPEN_CURBR
+        return "{"
     elif (lexem.cl == 'States.DELIM' and
           lexem.value == '}'):
-        return Terminals.CLOSE_CURBR
+        return "}"
     elif (lexem.cl == 'States.DELIM' and
           lexem.value == ';'):
-        return Terminals.SEMICOLON
+        return ";"
     elif (lexem.cl == 'States.ASSIGNMENT'):
-        return Terminals.ASSIGNMENT
+        return "="
     elif (lexem.cl in ['States.INT', 'States.FLOAT', 'States.CHAR', 'States.STRING']):
-        return Terminals.CONST
+        return "const"
+    elif (lexem.cl == "States.SCOMMENT"):
+        return "COMMENT"
     else:
         print('Alert!')
         print(lexem.cl)
