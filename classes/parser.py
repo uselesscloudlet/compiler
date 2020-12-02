@@ -1,63 +1,25 @@
-from classes.definitions import DELIMITERS, KEYWORDS, Terminals, States
+from classes.definitions import DELIMITERS, KEYWORDS, Terminals
+from classes.lexem import Lexem
+from syntax_settings import map_lexem_to_term
 
 
 class Parser:
-    __slots__ = ['__lexems', '__currentLexem']
+    __slots__ = ['__file']
 
-    def __init__(self, lexems):
-        self.__lexems = lexems
-        self.__currentLexem = 0
+    def __init__(self, file):
+        self.__file = file
+        self.__file.readline()
 
     def next_lexem(self):
-        if (self.__currentLexem >= len(self.__lexems)):
-            return Terminals.END_SYMBOL
+        line = self.__file.readline()
+        if line == '':
+            lexem = Lexem('', '', '')
+        else:
+            lexem = Lexem(*line.split(',')[1:])
 
-        lexem = self.__lexems[self.__currentLexem]
-        if (lexem.cl == States.SCOMMENT):
-            self.__currentLexem += 1
+        if lexem.cl == 'States.SCOMMENT':
             return self.next_lexem()
-        elif (lexem.cl in [States.AND, States.OR]):
-            lexem.term = Terminals.LOG_OPERATOR
-        elif (lexem.cl == States.COMPRASION):
-            lexem.term = Terminals.COMP_OPERATOR
-        elif (lexem.cl == States.OPERATOR and
-              lexem.value in ['+', '-']):
-            lexem.term = Terminals.PM_OPERATOR
-        elif (lexem.cl == States.OPERATOR and
-              lexem.value in ['*', '/']):
-            lexem.term = Terminals.MD_OPERATOR
-        elif (lexem.cl == States.PPFIX):
-            lexem.term = Terminals.PPFIX_OPERATOR
-        elif (lexem.cl == States.OPERATOR and
-              lexem.value in ['&', '|']):
-            lexem.term = Terminals.UNARY_OPERATOR
-        elif (lexem.cl == States.ID):
-            lexem.term = Terminals.VAR
-        elif (lexem.cl == States.KEYWORD and
-              lexem.value in ['int', 'float', 'char', 'string']):
-            lexem.term = Terminals.TYPE_NAME
-        elif (lexem.cl == States.DELIM and
-              lexem.value == '('):
-            lexem.term = Terminals.OPEN_PAR
-        elif (lexem.cl == States.DELIM and
-              lexem.value == ')'):
-            lexem.term = Terminals.CLOSE_PAR
-        elif (lexem.cl == States.DELIM and
-              lexem.value == '{'):
-            lexem.term = Terminals.OPEN_CURBR
-        elif (lexem.cl == States.DELIM and
-              lexem.value == '}'):
-            lexem.term = Terminals.CLOSE_CURBR
-        elif (lexem.cl == States.DELIM and
-              lexem.value == ';'):
-            lexem.term = Terminals.SEMICOLON
-        elif (lexem.cl == States.DELIM and
-              lexem.value == '='):
-            lexem.term = Terminals.ASSIGNMENT
-        elif (lexem.cl in [States.INT, States.FLOAT, States.CHAR, States.STRING]):
-            lexem.term = Terminals.CONST
 
-        self.__currentLexem += 1
+        lexem.term = map_lexem_to_term(lexem)
+
         return lexem
-    
-

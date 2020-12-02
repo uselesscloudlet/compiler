@@ -9,9 +9,7 @@ KEYWORDS = {
     'char': 3,
     'long': 4,
     'short': 5,
-    'string': 6,
-    'if': 7,
-    'else': 8,
+    'string': 6
 }
 
 
@@ -26,26 +24,27 @@ COMPRASIONSF = ['>', '<']
 
 
 class States(Enum):
-    IDLE = 0 # +
-    ID = 1 # + var
-    INT = 2 # + const
-    FLOAT = 3 # + const
-    CHAR = 4 # + const
-    STRING = 5 # + const 
-    KEYWORD = 6 # + var type_name
-    DELIM = 7 # + 
-    ASSIGNMENT = 8 # + 
-    COMPRASIONF = 9 # + 
-    COMPRASION = 10 # + comp_operator
-    PLUS = 11 # + 
-    MINUS = 12 # + 
-    PPFIX = 13 # + ppfix_operator
-    AND = 14 # + log_operator
-    OR = 15 # + log_operator
-    DIVIDE = 16 # + md_operator
-    OPERATOR = 17 # + pm_operator md_operator
-    SCOMMENT = 18 # +
-    ERROR = 19 # +
+    IDLE = 0  # +
+    ID = 1  # + var
+    INT = 2  # + const
+    FLOAT = 3  # + const
+    CHAR = 4  # + const
+    STRING = 5  # + const
+    KEYWORD = 6  # + var type_name
+    DELIM = 7  # +
+    ASSIGNMENT = 8  # +
+    COMPRASIONF = 9  # +
+    COMPRASION = 10  # + comp_operator
+    PLUS = 11  # +
+    MINUS = 12  # +
+    PPFIX = 13  # + ppfix_operator
+    AND = 14  # + log_operator
+    OR = 15  # + log_operator
+    DIVIDE = 16  # + md_operator
+    OPERATOR = 17  # + pm_operator md_operator
+    SCOMMENT = 18  # +
+    ERROR = 19  # +
+
 
 class Terminals(Enum):
     SEMICOLON = 0
@@ -64,6 +63,7 @@ class Terminals(Enum):
     PPFIX_OPERATOR = 13
     UNARY_OPERATOR = 14
     END_SYMBOL = 15
+
 
 class NonTerminals(Enum):
     STATS = 0
