@@ -138,4 +138,3 @@ line,type,value,attribute
 36,States.DELIM,;,None
 37,States.DELIM,},None
 38,States.DELIM,},None
-39,States.ID,a,0

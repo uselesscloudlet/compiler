@@ -1,7 +1,4 @@
 from classes.stateMachine import StateMachine
-from classes.parser import Parser
-from classes.definitions import NonTerminals, Terminals
-from tableParser import parseTable
 
 
 def defineLexemsFromFile(filename=''):

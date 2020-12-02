@@ -1,3 +1,6 @@
+from syntax.settings.symbols import Terminals
+
+
 def map_lexem_to_term(lexem):
     if (lexem.cl == ''):
         return Terminals.END_SYMBOL

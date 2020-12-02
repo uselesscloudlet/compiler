@@ -1,5 +1,6 @@
 from classes.lexem import Lexem
-from syntax_settings import map_lexem_to_term, Terminals
+from syntax.settings.symbols import Terminals
+from syntax.settings.lexem_to_term import map_lexem_to_term
 
 
 class Parser:
@@ -15,6 +16,7 @@ class Parser:
             lexem = Lexem('', '', '')
         else:
             lexem = Lexem(*line.split(',')[1:])
+            lexem.line = line.split(',')[0]
 
         if lexem.cl == 'States.SCOMMENT':
             return self.next_lexem()

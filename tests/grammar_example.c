@@ -1,19 +1,19 @@
-int a = 1;
-float b = 1.1;
-char c = 'c';
-string d = "str";
+a = 1;
+b = 1.1;
+c = 'c';
+d = "str";
 {
     {
-        a &&a;
-        b &&b;
+        e = a && a;
+        e = b && b;
     }
     {
-        a == a;
-        b != b;
-        c > c;
-        d < d;
-        a >= a;
-        b <= b;
+        e = a == a;
+        e = b != b;
+        e = c > c;
+        e = d < d;
+        e = a >= a;
+        e = b <= b;
     }
     {
         a = a + b;
@@ -28,11 +28,12 @@ string d = "str";
         a = (int)b;
     }
     {
-        ~a;
-        !a;
+        e = ~a;
+        e = !a;
     }
     {
-        ++a;
-        --b;
+        e = ++a;
+        e = --b;
     }
 }
+a

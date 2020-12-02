@@ -1,11 +1,11 @@
-from syntax_settings import term_map, nonterm_map
+from syntax.settings.symbols import term_map, nonterm_map
 import pandas as pd
 
 symb_map = term_map.copy()
 symb_map.update(nonterm_map)
 
 
-def parseTable(file):
+def parse_table(file):
     df = pd.read_csv(file)
     result = {}
     col_symb = None
@@ -16,9 +16,7 @@ def parseTable(file):
         col_symb = symb_map[col]
         result[col_symb] = {}
         for j, e in enumerate(df[col]):
-            if j == 0:
-                row_symb = symb_map[df.iloc[i, 0]]
-                continue
+            row_symb = symb_map[df.iloc[j, 0]]
             if pd.notna(e):
                 if j - 1 < len(nonterm_map):
                     result[col_symb][row_symb] = e
