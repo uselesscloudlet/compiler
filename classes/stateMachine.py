@@ -10,22 +10,18 @@ class StateMachine:
         self.__buffer = None
         self.__idDict = dict()
 
-
     @property
     def currentState(self):
         return self.__currentState
-    
 
     @currentState.setter
     def currentState(self, state):
         self.__currentState = state
 
-
     def __isDelimiter(self, symbol):
         return symbol in DELIMITERS
 
-
-    def __supFunc(self, symbol, t, attributes = None):
+    def __supFunc(self, symbol, t, attributes=None):
         result = list([Lexem(t, self.__buffer, attributes)])
         self.currentState = States.IDLE
         nextLex = self.handleSymbol(symbol)
@@ -33,12 +29,14 @@ class StateMachine:
             result += nextLex
         return result
 
-
     def handleSymbol(self, symbol):
         if self.currentState == States.IDLE:
             if symbol.isdigit():
                 self.__buffer = symbol
                 self.currentState = States.INT
+            elif symbol == '!':
+                self.__buffer = symbol
+                self.currentState = States.NOT
             elif symbol.isalpha() or symbol == '_':
                 self.__buffer = symbol
                 self.currentState = States.ID
@@ -101,7 +99,7 @@ class StateMachine:
                 self.currentState = States.FLOAT
             else:
                 return self.__supFunc(symbol, States.INT)
-        elif self.currentState == States.FLOAT: # ! допилить числа с плавающей точкой
+        elif self.currentState == States.FLOAT:  # ! допилить числа с плавающей точкой
             if symbol.isdigit():
                 self.__buffer += symbol
             else:
@@ -200,3 +198,10 @@ class StateMachine:
                 return [Lexem(States.SCOMMENT, self.__buffer)]
             else:
                 self.__buffer += symbol
+        elif self.currentState == States.NOT:
+            if symbol == '=':
+                self.__buffer += symbol
+                self.currentState = States.IDLE
+                return [Lexem(States.COMPRASION, self.__buffer)]
+            else:
+                return self.__supFunc(symbol, States.OPERATOR)
