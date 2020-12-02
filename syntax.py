@@ -1,7 +1,6 @@
 from syntax.parser import Parser
 from syntax.draw import visit
 import json
-import pprint
 import pydot
 
 
@@ -73,7 +72,7 @@ while buff[-1].value != "PROGRAM":
 
 graph = pydot.Dot(graph_type='graph')
 visit(buff[-1], graph=graph)
-graph.write_png('tree.png')
+graph.write_png('attachment/tree.png')
 
 
 lex_file.close()

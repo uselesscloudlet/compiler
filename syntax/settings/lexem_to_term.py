@@ -1,5 +1,3 @@
-
-
 def map_lexem_to_term(lexem):
     if (lexem.cl == ''):
         return "eof"

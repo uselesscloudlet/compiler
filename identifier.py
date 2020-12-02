@@ -24,3 +24,7 @@ def defineLexemsFromFile(filename=''):
     f.write('line,type,value,attribute\n')
     f.write("\n".join(map(str, allLex)))
     f.close()
+    f2 = open('syntax/settings/lexems.csv', 'w')
+    f2.write('line,type,value,attribute\n')
+    f2.write("\n".join(map(str, allLex)))
+    f2.close()
