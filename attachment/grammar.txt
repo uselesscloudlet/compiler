@@ -1,61 +1,19 @@
-Stats ::= stats stat
-|
-;
-
-stat ::= assignment_exp ‘;’
-| { stats }
-;
-
-assignment_exp ::= VAR ‘=’ expression ;
-
-expression ::= log_exp
-| log_exp ‘&&’ expression
-| log_exp ‘||’ expression
-;
-
-log_exp ::= additive_exp
-| additive_exp ‘==’ additive_exp
-| additive_exp ‘!=’ additive_exp
-| additive_exp ‘>’ additive_exp
-| additive_exp ‘<’ additive_exp
-| additive_exp ‘>=’ additive_exp
-| additive_exp ‘<=’ additive_exp
-
-additive_exp ::= mult_exp
-| additive_exp '+' mult_exp
-| additive_exp '-' mult_exp
-;
-
-mult_exp ::= cast_exp
-| mult_exp '*' cast_exp
-| mult_exp '/' cast_exp
-| mult_exp '%' cast_exp
-;
-
-
-cast_exp ::= unary_exp
-| '(' type_name ')' cast_exp
-;
-
-unary_exp ::= VAR
-| INT
-| FLOAT
-| CHAR
-| '++' unary_exp
-| '--' unary_exp
-| unary_operator cast_exp
-;
-
-unary_operator ::= '&' | '*' | '+' | '-' | '~' | '!' ;	
-
-type_name ::= ‘int’ | ‘double’ | ‘float’ | ‘char’ | ‘long’ | ‘short’ ;
-
-VAR ::= идентификатор
-
-INT ::= целое число
-
-CHAR ::= символ в одинарных кавычках
-
-STRING ::= строка в двойных кавычках
-
-FLOAT ::= вещественное число
+STATS → STAT
+STATS → STATS STAT
+STAT → ASSIGNMENT_EXP ;
+STAT → { STATS }
+ASSIGNMENT_EXP → var = EXPRESSION
+EXPRESSION → LOG_EXP
+EXPRESSION → LOG_EXP log_operator EXPRESSION
+LOG_EXP → ADDITIVE_EXP
+LOG_EXP → ADDITIVE_EXP comp_operator ADDITIVE_EXP
+ADDITIVE_EXP → MULT_EXP
+ADDITIVE_EXP → ADDITIVE_EXP pm_operator MULT_EXP
+MULT_EXP → CAST_EXP
+MULT_EXP → MULT_EXP md_operator CAST_EXP
+CAST_EXP → UNARY_EXP
+CAST_EXP → ( type_name ) CAST_EXP
+UNARY_EXP → var
+UNARY_EXP → const
+UNARY_EXP → prefix_operator UNARY_EXP
+UNARY_EXP → unary_operator CAST_EXP

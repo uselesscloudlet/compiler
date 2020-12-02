@@ -4,7 +4,8 @@ line,type,value,attribute
 1,States.DELIM,(,None
 1,States.DELIM,),None
 2,States.DELIM,{,None
-3,States.FLOAT,-22.992,None
+3,States.OPERATOR,-,None
+3,States.FLOAT,22.992,None
 3,States.DELIM,;,None
 4,States.KEYWORD,int,0
 4,States.ID,a,1

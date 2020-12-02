@@ -1,5 +1,7 @@
 from classes.stateMachine import StateMachine
-
+from classes.parser import Parser
+from classes.definitions import NonTerminals, Terminals
+from tableParser import parseTable
 
 def defineLexemsFromFile(filename = ''):
     file = open('tests/' + filename, 'r')
@@ -20,8 +22,17 @@ def defineLexemsFromFile(filename = ''):
             lexem.line = index + 1
         allLex += lexems
 
-    f = open('result.csv', 'w')
+    f = open('attachment/result.csv', 'w')
     f.write('line,type,value,attribute\n')
     f.write("\n".join(map(str, allLex)))
     f.close()
-    print("\n".join(map(str, allLex)))
+    parser = Parser(allLex)
+    lex = parser.next_lexem()
+    while lex != Terminals.END_SYMBOL:
+        print(lex)
+        lex = parser.next_lexem()
+
+    tablef = open('attachment/control_table.csv')
+    parseTable(tablef)
+    tablef.close()
+    #print("\n".join(map(str, allLex)))
